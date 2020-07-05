@@ -1,5 +1,5 @@
 
-![CRUDA - CRUD React-Application boilerplate](public/logos/logo-h80.png "CRUDA")
+![CRUDA - CRUD React-Application boilerplate](public/img/logo-h80.png "CRUDA")
 
 A CRUD React-Application boilerplate.
 
@@ -20,6 +20,11 @@ Take a look in ```index.jsx``` where the config is load. By default, the configu
 - Implement the Data Adapter interface
 - Define Schemas (JSON Schema and optionally a UI Schema)
 - add configuration entry
+
+## Screenshot from Sample Application
+To get a visual impression about this app here's a screenshot from the sample application.
+![CRUDA - Screenshot from e2e tests](public/img/sample.png "CRUDA Sample application")
+
 
 ---
 

@@ -9,7 +9,7 @@ export default function getAppConfig(): AppConfig {
     return {
         name: "CRUDA Sample Application",
         logo: {
-            src: "logos/logo-h80.png",
+            src: "img/logo-h80.png",
             alt: "CRUDA Logo",
         },
         pages: [
