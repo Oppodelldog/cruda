@@ -1,7 +1,7 @@
 
 ![CRUDA - CRUD React-Application boilerplate](public/img/logo-h80.png "CRUDA")
 
-A CRUD React-Application boilerplate.
+**A CRUD React-Application boilerplate.**
 
 This boilerplate project gives a "ready to code" frontend application that lets
 you easily add forms to edit your data entities.
