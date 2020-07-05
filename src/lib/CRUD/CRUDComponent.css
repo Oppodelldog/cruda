@@ -1,0 +1,23 @@
+.Widget .headline {
+    position: relative;
+    margin-bottom: 10px;
+
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.Widget .headline span {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.Widget .headline button {
+    position: absolute;
+    right: 0;
+}
+
+.Widget .btDelete {
+    margin-top: 10px;
+}
+

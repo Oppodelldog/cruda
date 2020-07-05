@@ -1,0 +1,19 @@
+.header{
+    border-bottom:1px solid grey;
+    margin-bottom:20px;
+    padding-left:12px;
+    padding-top:4px;
+    padding-bottom:4px;
+}
+
+.header > span{
+   margin-left:10px;
+}
+
+.header .menu{
+    display:inline-block;
+}
+.header .menu a{
+    margin-left:20px;
+    font-weight: bold;
+}

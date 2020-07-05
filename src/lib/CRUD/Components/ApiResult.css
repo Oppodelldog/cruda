@@ -1,0 +1,24 @@
+
+.apiError,
+.apiSuccess {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.apiError {
+
+}
+
+.apiError.hideApiError {
+    display: none;
+}
+
+.apiSuccess {
+
+}
+
+.apiSuccess.hideApiSuccess {
+    display: none;
+}

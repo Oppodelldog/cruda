@@ -1,0 +1,10 @@
+.ErrorBoundary{
+    padding:20px;
+}
+.ErrorBoundary button{
+    margin-top: 10px;
+}
+
+.ErrorBoundary pre{
+    margin-top: 10px;
+}
