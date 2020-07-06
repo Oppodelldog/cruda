@@ -30,6 +30,7 @@ export default class List extends Component<Props, any> {
             <ul className={"List"}>
                 {this.props.items.map((item: ListItem) =>
                     <li key={item.id}
+                        data-testid={"entity-list-item-" + item.id}
                         onClick={() => this.select(item.id)}
                         className={this.state.selectedId === item.id ? 'selected' : 'unselected'}>{item.caption}</li>
                 )}

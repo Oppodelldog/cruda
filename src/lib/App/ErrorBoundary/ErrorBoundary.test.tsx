@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom/extend-expect';
 import {render} from '@testing-library/react';
 import React, {Component} from 'react';
 import {ErrorBoundary} from "./ErrorBoundary";
@@ -9,9 +10,7 @@ test('ErrorBoundary renders stable component', () => {
         </ErrorBoundary>
     );
 
-    const divElement = getByText('STABLE')
-    // noinspection TypeScriptUnresolvedFunction
-    expect(divElement).toBeInTheDocument();
+    expect(getByText('STABLE')).toBeInTheDocument();
 });
 
 test('ErrorBoundary renders and logs error if component throws', () => {
@@ -26,9 +25,7 @@ test('ErrorBoundary renders and logs error if component throws', () => {
         </ErrorBoundary>
     );
 
-    const divElement = getByText(ErrorBoundary.errorTitle)
-    // noinspection TypeScriptUnresolvedFunction
-    expect(divElement).toBeInTheDocument();
+    expect(getByText(ErrorBoundary.errorTitle)).toBeInTheDocument();
     expect(consoleError).toEqual(UnstableComponent.error)
 
     console.error = originalError;

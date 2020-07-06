@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom/extend-expect';
 import {render} from '@testing-library/react';
 import React from 'react';
 import {BrowserRouter} from "react-router-dom";
@@ -13,7 +14,7 @@ test('Header renders logo', () => {
     const {getByAltText} = render(<Header logo={logoConfig}/>);
 
     const imgElement = getByAltText('imgAlt')
-    // noinspection TypeScriptUnresolvedFunction
+
     expect(imgElement).toBeInTheDocument();
     expect(imgElement.src).toEqual("http://localhost/" + logoConfig.src)
 });
@@ -24,7 +25,7 @@ test('Header renders title', () => {
     const {getByText} = render(<Header title={title}/>);
 
     const titleElement = getByText(title);
-    // noinspection TypeScriptUnresolvedFunction
+
     expect(titleElement).toBeInTheDocument();
 });
 
@@ -48,8 +49,7 @@ test('Header renders Routes (must be placed in BrowserRouter to work)', () => {
 
 function expectRouteRendered(getByText, routeConfig: RouteConfig) {
     const linkElement = getByText(routeConfig.name);
-    // noinspection TypeScriptUnresolvedFunction
-    expect(linkElement).toBeInTheDocument();
 
+    expect(linkElement).toBeInTheDocument();
     expect(linkElement.href).toEqual("http://localhost/" + routeConfig.path)
 }

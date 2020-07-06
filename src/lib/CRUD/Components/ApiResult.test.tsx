@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom/extend-expect';
 import {render} from '@testing-library/react';
 import React from 'react';
 import ApiResult from "./ApiResult";
@@ -8,10 +9,7 @@ test('ApiResult renders nothing', () => {
         <ApiResult/>
     );
 
-    // noinspection TypeScriptUnresolvedFunction
     expect(queryByTestId("api-result-error")).not.toBeInTheDocument();
-
-    // noinspection TypeScriptUnresolvedFunction
     expect(queryByTestId("api-result-success")).not.toBeInTheDocument();
 });
 
@@ -22,10 +20,7 @@ test('ApiResult renders success and error', () => {
         <ApiResult apiError={error} apiSuccess={success}/>
     );
 
-    // noinspection TypeScriptUnresolvedFunction
     expect(queryByTestId("api-result-error")).toBeInTheDocument();
-
-    // noinspection TypeScriptUnresolvedFunction
     expect(queryByTestId("api-result-success")).toBeInTheDocument();
 });
 

@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom/extend-expect';
 import {render} from '@testing-library/react';
 import React from 'react';
 import {BrowserRouter, Link} from "react-router-dom";
@@ -27,9 +28,7 @@ test('Factory renders jsx page from config', () => {
 
     getByText(/NavigateToPage/i).click()
 
-    const element = getByText(stubText)
-    // noinspection TypeScriptUnresolvedFunction
-    expect(element).toBeInTheDocument();
+    expect(getByText(stubText)).toBeInTheDocument();
 });
 
 test('Factory renders crud page from config', () => {
@@ -52,7 +51,5 @@ test('Factory renders crud page from config', () => {
 
     getByText(/NavigateToPage/i).click()
 
-    const element = getByText(CRUDComponent.defaultHeadline)
-    // noinspection TypeScriptUnresolvedFunction
-    expect(element).toBeInTheDocument();
+    expect(getByText(CRUDComponent.defaultHeadline)).toBeInTheDocument();
 });

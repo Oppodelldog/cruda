@@ -1,5 +1,4 @@
 import {render} from "@testing-library/react";
-// noinspection TypeScriptCheckImport
 import React from 'react';
 import {doFilterInput} from "./Filter.test";
 import FilteredList from "./FilteredList";
@@ -41,8 +40,6 @@ test('FilteredList renders ListItems filtered by Filter', () => {
     const entry1 = queryByText(listTestBed.item1.caption)
     const entry2 = queryByText(listTestBed.item2.caption)
 
-    // noinspection TypeScriptUnresolvedFunction
     expect(entry1).not.toBeInTheDocument()
-    // noinspection TypeScriptUnresolvedFunction
     expect(entry2).toBeInTheDocument()
 });

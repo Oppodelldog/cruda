@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom/extend-expect';
 // noinspection TypeScriptCheckImport
 import {fireEvent, render} from '@testing-library/react';
 import React from 'react';
@@ -26,9 +27,7 @@ export function expectListRendersListItems(testBed: ListTestBed, sut: JSX.Elemen
     const entry1 = getByText(testBed.item1.caption)
     const entry2 = getByText(testBed.item2.caption)
 
-    // noinspection TypeScriptUnresolvedFunction
     expect(entry1).toBeInTheDocument()
-    // noinspection TypeScriptUnresolvedFunction
     expect(entry2).toBeInTheDocument()
 }
 
