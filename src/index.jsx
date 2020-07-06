@@ -5,7 +5,7 @@ import {render} from "./lib/App"
 import './lib/App/app.css';
 import "./lib/App/Layout/Layout.css"
 
-render("root", getSampleAppConfig());
+render("app", getSampleAppConfig());
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
