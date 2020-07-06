@@ -1,7 +1,9 @@
 import '@testing-library/jest-dom/extend-expect';
-import {render} from '@testing-library/react';
+// noinspection TypeScriptCheckImport
+import {fireEvent, render} from '@testing-library/react';
 import React, {Component} from 'react';
 import {ErrorBoundary} from "./ErrorBoundary";
+
 
 test('ErrorBoundary renders stable component', () => {
     const {getByText} = render(
@@ -13,13 +15,21 @@ test('ErrorBoundary renders stable component', () => {
     expect(getByText('STABLE')).toBeInTheDocument();
 });
 
-test('ErrorBoundary renders and logs error if component throws', () => {
-    let consoleError = null;
+test('ErrorBoundary renders and logs error if component throws, the button reloads the page', async () => {
     const originalError = console.error;
+    const originalReload = window.location.reload;
+
+    let consoleError = null;
+    let wasReloadCalled = false;
+
     console.error = (msg) => {
         consoleError = msg;
     }
-    const {getByText} = render(
+    window.location.reload = () => {
+        wasReloadCalled = true
+    }
+
+    const {getByText, findByTestId} = render(
         <ErrorBoundary>
             <UnstableComponent/>
         </ErrorBoundary>
@@ -28,7 +38,12 @@ test('ErrorBoundary renders and logs error if component throws', () => {
     expect(getByText(ErrorBoundary.errorTitle)).toBeInTheDocument();
     expect(consoleError).toEqual(UnstableComponent.error)
 
+    fireEvent.click(await findByTestId('error-boundary-link-reload'))
+
+    expect(wasReloadCalled).toBeTruthy()
+
     console.error = originalError;
+    window.location.reload = originalReload;
 });
 
 class StableComponent extends Component<any, any> {

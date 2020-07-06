@@ -30,7 +30,7 @@ export class ErrorBoundary extends Component<Props, State> {
         if (this.state.hasError) {
             return <div className={"ErrorBoundary"}>
                 <h1>{ErrorBoundary.errorTitle}</h1>
-                <button onClick={() => {
+                <button data-testid={"error-boundary-link-reload"} onClick={() => {
                     window.location.reload();
                 }}>try again
                 </button>
