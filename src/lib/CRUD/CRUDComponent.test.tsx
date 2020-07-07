@@ -5,6 +5,9 @@ import React from 'react';
 import {TestAdapter, TestItem} from "../../Sample/TestAdapter";
 import {TestSchemaProvider} from "../../Sample/TestSchemaProvider";
 import CRUDComponent from "./CRUDComponent";
+import {CRUDComponentObserver} from "./Observer/CRUDComponentObserver";
+import {subscriptionDone, throwSubscriptionError} from "./Observer/DefaultFunctions";
+import {ToolsObserver} from "./Observer/ToolsObserver";
 
 describe('CRUDComponent initial state', () => {
     test('CRUDComponent renders without props', () => {
@@ -152,7 +155,6 @@ describe('CRUDComponent Errors', () => {
         expect(assets.testData.adapter.callsCreateItem).toHaveLength(1)
     });
 
-
     test('if items load fails, an error is shown', async () => {
         const error = "cannot load item"
         assets.testData.adapter.errorLoadingItem = error;
@@ -184,6 +186,173 @@ describe('CRUDComponent Errors', () => {
     });
 })
 
+describe('CRUDComponentObserver', () => {
+    let assets: Assets;
+
+    beforeEach(async () => {
+        assets = await initComponentWithItemSelected()
+    });
+
+    test('item was selected, observer is notified', async () => {
+        let subscription = CRUDComponentObserver.ItemSelected.subscribe(
+            payload => {
+                expect(payload).toEqual(assets.testData.testItem1)
+            }, throwSubscriptionError, subscriptionDone
+        )
+        await assets.helper.clickListItem(assets.testData.testItem1)
+        await assets.helper.waitForForm()
+        subscription.unsubscribe()
+    });
+
+    test('item was selected but was null, observer is not notified', async () => {
+        let subscription = CRUDComponentObserver.ItemSelected.subscribe(
+            () => {
+                throw new Error("OBSERVER MUST NOT BE NOTIFIED WHEN SELECTED ITEM IS NULL")
+            }, throwSubscriptionError, subscriptionDone
+        )
+        assets.testData.adapter.loadItemReturnsNull = true;
+        await assets.helper.clickListItem(assets.testData.testItem1)
+        await assets.helper.waitForForm()
+        subscription.unsubscribe()
+    });
+
+    test('item was updated, observer is notified', async () => {
+        let subscription = CRUDComponentObserver.ItemUpdated.subscribe(
+            payload => {
+                expect(payload).toEqual(assets.testData.testItem1)
+            }, throwSubscriptionError, subscriptionDone
+        )
+        await assets.helper.clickListItem(assets.testData.testItem1)
+        await assets.helper.waitForForm()
+        await assets.helper.submitForm()
+        subscription.unsubscribe()
+    });
+
+    test('item was created, observer is notified', async () => {
+        const newItem = {
+            id: "new-id",
+            text: "new-text",
+            done: true,
+        }
+        let subscription = CRUDComponentObserver.ItemCreated.subscribe(
+            payload => {
+                expect(payload).toEqual(newItem)
+            }, throwSubscriptionError, subscriptionDone
+        )
+
+        await assets.helper.newItem()
+        await assets.helper.setIdInput(newItem.id)
+        await assets.helper.setTextInput(newItem.text)
+        await assets.helper.clickDoneCheckbox()
+        assets.helper.submitForm()
+        subscription.unsubscribe()
+    });
+
+    test('item was deleted, observer is notified', async () => {
+        let subscription = CRUDComponentObserver.ItemDeleted.subscribe(
+            payload => {
+                expect(payload).toEqual(assets.testData.testItem1)
+            }, throwSubscriptionError, subscriptionDone
+        )
+        await assets.helper.clickListItem(assets.testData.testItem1)
+        await assets.helper.deleteItem()
+        subscription.unsubscribe()
+    });
+})
+
+describe('ToolsObserver', () => {
+    let reloadItemMock: jest.Mock;
+    let reloadItemListMock: jest.Mock;
+    let reloadItemSubscriptionMock: jest.Mock;
+    let reloadItemListSubscriptionMock: jest.Mock;
+    let originalToolsObserverReloadItem: any;
+    let originalToolsObserverReloadItemList: any;
+
+    beforeEach(() => {
+        originalToolsObserverReloadItem = ToolsObserver.ReloadItem;
+        originalToolsObserverReloadItemList = ToolsObserver.ReloadItemList;
+        // noinspection TypeScriptUnresolvedVariable
+        reloadItemMock = jest.fn();
+        // noinspection TypeScriptUnresolvedVariable
+        reloadItemSubscriptionMock = jest.fn()
+        // noinspection TypeScriptUnresolvedVariable
+        reloadItemSubscriptionMock.unsubscribe = jest.fn();
+        // noinspection TypeScriptUnresolvedVariable
+        reloadItemMock.subscribe = jest.fn();
+        // noinspection TypeScriptUnresolvedVariable
+        reloadItemMock.subscribe.mockReturnValue(reloadItemSubscriptionMock);
+
+        // noinspection TypeScriptUnresolvedVariable
+        reloadItemListMock = jest.fn();
+        // noinspection TypeScriptUnresolvedVariable
+        reloadItemListSubscriptionMock = jest.fn()
+        // noinspection TypeScriptUnresolvedVariable
+        reloadItemListSubscriptionMock.unsubscribe = jest.fn();
+        // noinspection TypeScriptUnresolvedVariable
+        reloadItemListMock.subscribe = jest.fn();
+        // noinspection TypeScriptUnresolvedVariable
+        reloadItemListMock.subscribe.mockReturnValue(reloadItemListSubscriptionMock);
+
+        // noinspection TypeScriptValidateTypes
+        ToolsObserver.ReloadItem = reloadItemMock;
+        // noinspection TypeScriptValidateTypes
+        ToolsObserver.ReloadItemList = reloadItemListMock;
+    })
+
+    afterEach(() => {
+        ToolsObserver.ReloadItem = originalToolsObserverReloadItem
+        ToolsObserver.ReloadItem = originalToolsObserverReloadItemList;
+    })
+
+    test('registers ToolsObserver on mount', async () => {
+        const {findByText} = render(
+            <CRUDComponent/>
+        );
+
+        expect(await findByText(CRUDComponent.defaultHeadline)).toBeInTheDocument()
+
+        // noinspection TypeScriptUnresolvedVariable
+        expect(reloadItemMock.subscribe).toHaveBeenCalled();
+        // noinspection TypeScriptUnresolvedVariable
+        expect(reloadItemListMock.subscribe).toHaveBeenCalled();
+    });
+
+    test('if ToolsObserver was not registered it is not unsubscribed', async () => {
+        // noinspection TypeScriptUnresolvedVariable
+        reloadItemMock.subscribe.mockReturnValue(null)
+        // noinspection TypeScriptUnresolvedVariable
+        reloadItemListMock.subscribe.mockReturnValue(null)
+
+        const {unmount, findByText} = render(
+            <CRUDComponent/>
+        );
+
+        expect(await findByText(CRUDComponent.defaultHeadline)).toBeInTheDocument()
+
+        unmount()
+
+        // noinspection TypeScriptUnresolvedVariable
+        expect(reloadItemSubscriptionMock.unsubscribe).not.toHaveBeenCalled();
+        // noinspection TypeScriptUnresolvedVariable
+        expect(reloadItemListSubscriptionMock.unsubscribe).not.toHaveBeenCalled();
+    });
+
+    test('unregisters ToolsObserver on unmount', async () => {
+        const {unmount, findByText} = render(
+            <CRUDComponent/>
+        );
+
+        expect(await findByText(CRUDComponent.defaultHeadline)).toBeInTheDocument()
+
+        unmount()
+
+        // noinspection TypeScriptUnresolvedVariable
+        expect(reloadItemSubscriptionMock.unsubscribe).toHaveBeenCalled();
+        // noinspection TypeScriptUnresolvedVariable
+        expect(reloadItemListSubscriptionMock.unsubscribe).toHaveBeenCalled();
+    });
+})
+
 async function expectErrorMessage(assets: Assets, error: string) {
     expect(await assets.helper.findByTestId("api-result-error")).toBeVisible()
     expect(await assets.helper.findByTestId("api-result-error")).toHaveTextContent(error);
@@ -194,8 +363,7 @@ interface Assets {
     testData: TestData
 }
 
-async function initComponentWithItemSelected(): Promise<Assets> {
-    let testData = new TestData();
+async function initComponentWithListLoad(testData: TestData) {
     const {container} = render(
         <CRUDComponent adapter={testData.adapter}
                        schemaProvider={testData.schemaProvider}/>
@@ -203,6 +371,13 @@ async function initComponentWithItemSelected(): Promise<Assets> {
     let helper = new TestHelper(container, testData);
 
     await helper.findListItem(testData.testItem1)
+
+    return helper;
+}
+
+async function initComponentWithItemSelected(): Promise<Assets> {
+    let testData = new TestData();
+    let helper = await initComponentWithListLoad(testData);
     await helper.clickListItem(testData.testItem1)
     await helper.waitForForm()
 

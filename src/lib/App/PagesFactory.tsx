@@ -16,7 +16,7 @@ export function createPages(appConfig: AppConfig): JSX.Element {
         {appConfig.pages.map((c) =>
             <Route key={c.route.path} path={c.route.path}>
                 {renderJSXElement(c.jsxElement)}
-                {createCRUDPage(c.crud)}
+                {createCRUDPage(c.crud,c.crudToolJsx)}
             </Route>
         )}
     </>;

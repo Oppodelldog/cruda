@@ -1,11 +1,13 @@
 import React from 'react'
 import {AppConfig} from '../lib/App/Config/AppConfig';
+import SampleTools from "./SampleTools";
 import {TestAdapter} from "./TestAdapter";
 import {TestSchemaProvider} from "./TestSchemaProvider";
 import {TodoAdapter} from "./TodoAdapter";
 import {TodoSchemaProvider} from "./TodoSchemaProvider";
 
 export default function getAppConfig(): AppConfig {
+    const testAdapter = new TestAdapter();
     return {
         name: "CRUDA Sample Application",
         logo: {
@@ -52,6 +54,18 @@ export default function getAppConfig(): AppConfig {
                     adapter: new TestAdapter(),
                     schemaProvider: new TestSchemaProvider()
                 }
+            },
+            {
+                route: {
+                    name: "Test Tools",
+                    path: "/test-and-tools",
+                },
+                crud: {
+                    headline: "Test & Tools",
+                    adapter: testAdapter,
+                    schemaProvider: new TestSchemaProvider()
+                },
+                crudToolJsx: <SampleTools adapter={testAdapter}/>
             },
         ]
     } as AppConfig

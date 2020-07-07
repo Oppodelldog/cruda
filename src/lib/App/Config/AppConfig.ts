@@ -1,5 +1,5 @@
 import {CRUDConfig} from "../../CRUD/CRUDComponent";
-import {LogoConfig} from "../Layout/Header";
+import {LogoConfig} from "../Components/Layout/Header";
 
 /**
  * AppConfig holds the top level configuration data for the CRUDA application.
@@ -18,6 +18,10 @@ export interface PageConfig {
      * crud provides configuration to display a CRUDComponent.
      */
     crud?: CRUDConfig
+    /**
+     * crudToolJsx will be placed next to the crud component to provide additional, entity related functionalities.
+     */
+    crudToolJsx?: JSX.Element
     /**
      * jsxElement provides a JSX Element which could be any ReactComponent.
      */

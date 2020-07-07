@@ -31,8 +31,8 @@ export class TestAdapter implements Adapter {
     public errorLoadingItem: string = "";
     public errorLoadingItemList: string = ""
     public errorUpdatingItem: string = "";
-
     public items: TestItem[] = [];
+    public loadItemReturnsNull: boolean = false;
 
     constructor() {
         (window as any)["testAdapter"] = this;
@@ -69,6 +69,10 @@ export class TestAdapter implements Adapter {
 
     async loadItem(id: string): Promise<LoadItemResult> {
         this.callsLoadItem.push(id);
+
+        if (this.loadItemReturnsNull) {
+            return this.resolve<LoadItemResult>(new LoadItemResult(null));
+        }
 
         if (this.errorLoadingItem !== "") {
             return this.resolve<LoadItemResult>(new LoadItemResult(null, this.errorLoadingItem));

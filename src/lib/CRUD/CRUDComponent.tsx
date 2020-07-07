@@ -1,9 +1,13 @@
 import Form from "@rjsf/core"
 import React, {Component} from 'react'
+import {Subscription} from "rxjs";
 import ApiResult from "./Components/ApiResult"
 import FilteredList from "./Components/FilteredList";
 import './CRUDComponent.css'
 import {Adapter, ListItem, NotImplementedDataAdapter} from "./Data/Adapter";
+import {CRUDComponentObserver} from "./Observer/CRUDComponentObserver";
+import {subscriptionDone, throwSubscriptionError} from "./Observer/DefaultFunctions";
+import {ToolsObserver} from "./Observer/ToolsObserver";
 import {SchemaProvider, SchemaProviderDefault} from "./Provider/SchemaProvider";
 import {StateContext} from "./Provider/UISchemaProvider";
 
@@ -50,6 +54,8 @@ export default class CRUDComponent extends Component<CRUDConfig, State> {
     } as CRUDConfig;
 
     public static readonly generalMessageOK = "ok";
+    private reloadItemSub: Subscription | null = null;
+    private reloadItemListSub: Subscription | null = null;
 
     protected constructor(props: CRUDConfig) {
         super(props);
@@ -63,7 +69,19 @@ export default class CRUDComponent extends Component<CRUDConfig, State> {
     }
 
     async componentDidMount() {
+        this.reloadItemSub = ToolsObserver.ReloadItem.subscribe((itemId: any) => this.loadItem(itemId), throwSubscriptionError, subscriptionDone);
+        this.reloadItemListSub = ToolsObserver.ReloadItemList.subscribe(() => this.loadItemList(), throwSubscriptionError, subscriptionDone);
+
         await this.loadItemList()
+    }
+
+    componentWillUnmount() {
+        if (this.reloadItemSub !== null) {
+            this.reloadItemSub.unsubscribe()
+        }
+        if (this.reloadItemListSub !== null) {
+            this.reloadItemListSub.unsubscribe()
+        }
     }
 
     isItemSelected(): boolean {
@@ -130,11 +148,12 @@ export default class CRUDComponent extends Component<CRUDConfig, State> {
     protected async saveItem(e: any) {
         this.setErrorMessage("")
         this.setSuccessMessage("");
-
         if (this.isItemSelected()) {
             await this.updateItem(e.formData)
+            CRUDComponentObserver.publishItemUpdated(e.formData)
         } else {
             await this.createItem(e.formData)
+            CRUDComponentObserver.publishItemCreated(e.formData)
         }
     }
 
@@ -165,6 +184,11 @@ export default class CRUDComponent extends Component<CRUDConfig, State> {
         this.setSuccessMessage("");
 
         await this.loadItem(id);
+
+        let selectedItem = this.getSelectedItem();
+        if (selectedItem !== null) {
+            CRUDComponentObserver.publishItemSelected(selectedItem)
+        }
     }
 
     private getSelectedItem(): object | null {
@@ -218,8 +242,11 @@ export default class CRUDComponent extends Component<CRUDConfig, State> {
             this.setErrorMessage(result.error)
         } else {
             this.setSuccessMessage(CRUDComponent.generalMessageOK)
+            let copyItem: object = {};
+            Object.assign(copyItem, this.state.selectedItem)
             await this.setItem(null);
             await this.loadItemList();
+            CRUDComponentObserver.publishItemDeleted(copyItem)
         }
     }
 }
