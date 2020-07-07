@@ -40,5 +40,5 @@ To get a visual impression about this app here's a screenshot from the sample ap
 * <a href="https://github.com/facebook/create-react-app/tree/master/packages/react-scripts">react-scripts</a>
 * <a href="https://github.com/microsoft/TypeScript">TypeScript</a>
 * <a href="https://github.com/rjsf-team/react-jsonschema-form">react-jsonschema-form</a>
-* any many more: ~ 3.349.661 lines of JS code in ~24.761 files
+* any many more: ~ 3.481.939 lines of JS code in ~33.179 files
 
