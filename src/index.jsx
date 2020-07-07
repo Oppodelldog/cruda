@@ -3,7 +3,7 @@ import getSampleAppConfig from "./Sample/SampleConfig";
 import {render} from "./lib/App"
 
 import './lib/App/app.css';
-import "./lib/App/Layout/Layout.css"
+import "./lib/App/Components/Layout/Layout.css"
 
 render("app", getSampleAppConfig());
 

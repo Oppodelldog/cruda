@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
-import {RouteConfig} from "../Config/AppConfig";
+import {RouteConfig} from "../../Config/AppConfig";
 import "./Header.css"
 
 interface Props {

@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 import {render} from '@testing-library/react';
 import React from 'react';
 import {BrowserRouter} from "react-router-dom";
-import {RouteConfig} from "../Config/AppConfig";
+import {RouteConfig} from "../../Config/AppConfig";
 import Header, {LogoConfig} from "./Header";
 
 test('Header renders logo', () => {
