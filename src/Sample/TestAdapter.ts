@@ -34,8 +34,8 @@ export class TestAdapter implements Adapter {
     public items: TestItem[] = [];
     public loadItemReturnsNull: boolean = false;
 
-    constructor() {
-        (window as any)["testAdapter"] = this;
+    constructor(testAdapterID: string = "") {
+        (window as any)["testAdapter" + testAdapterID] = this;
     }
 
     async createItem(formData: any): Promise<CreateItemResult> {

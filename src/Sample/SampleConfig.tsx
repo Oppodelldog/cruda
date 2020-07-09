@@ -6,8 +6,11 @@ import {TestSchemaProvider} from "./TestSchemaProvider";
 import {TodoAdapter} from "./TodoAdapter";
 import {TodoSchemaProvider} from "./TodoSchemaProvider";
 
+const testAdapterIDTestAndTools = 'testandtools';
+const testAdapterIDTest = 'test';
+
 export default function getAppConfig(): AppConfig {
-    const testAdapter = new TestAdapter();
+    const testAdapter = new TestAdapter(testAdapterIDTestAndTools);
     return {
         name: "CRUDA Sample Application",
         logo: {
@@ -51,7 +54,7 @@ export default function getAppConfig(): AppConfig {
                 },
                 crud: {
                     headline: "Test",
-                    adapter: new TestAdapter(),
+                    adapter: new TestAdapter(testAdapterIDTest),
                     schemaProvider: new TestSchemaProvider()
                 }
             },
