@@ -1,0 +1,14 @@
+language: node
+
+env:
+  global:
+    - CI=test
+
+services:
+  - docker
+
+before_install:
+  docker pull node:node:14.10.1
+
+script:
+  - .auto-update/try.sh
