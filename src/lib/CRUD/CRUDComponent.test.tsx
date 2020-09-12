@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect';
 // noinspection TypeScriptCheckImport
-import {findByTestId, fireEvent, queryByAttribute, queryByTestId, render, waitForElement} from '@testing-library/react';
+import {findByTestId, fireEvent, queryByAttribute, queryByTestId, render, waitFor} from '@testing-library/react';
 import React from 'react';
 import {TestAdapter, TestItem} from "../../Sample/TestAdapter";
 import {TestSchemaProvider} from "../../Sample/TestSchemaProvider";
@@ -328,7 +328,6 @@ describe('ToolsObserver', () => {
         );
 
         expect(await findByText(CRUDComponent.defaultHeadline)).toBeInTheDocument()
-
         unmount()
 
         // noinspection TypeScriptUnresolvedVariable
@@ -459,11 +458,15 @@ class TestHelper {
     }
 
     submitForm() {
-        fireEvent.click(queryByAttribute("type", this.container, "submit"))
+        let submitButton = queryByAttribute("type", this.container, "submit");
+        if (submitButton === null) {
+            throw new Error("submitButton was null");
+        }
+        fireEvent.click(submitButton)
     }
 
     async waitForForm() {
-        return waitForElement(() => queryByAttribute('id', this.container, "root_id"))
+        return waitFor(() => queryByAttribute('id', this.container, "root_id"))
     }
 }
 
