@@ -15,5 +15,8 @@ services:
 before_install:
   docker pull node:14.10.1
 
+before_script:
+  - yarn install
+
 script:
   - .auto-update/try.sh
