@@ -11,12 +11,6 @@ env:
   global:
     - CI=test
 
-services:
-  - docker
-
-before_install:
-  docker pull node:14.10.1
-
 before_script:
   - yarn install
 
