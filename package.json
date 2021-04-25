@@ -11,7 +11,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
-    "rxjs": "^6.6.3"
+    "rxjs": "^6.6.7"
   },
   "devDependencies": {
     "@sheerun/mutationobserver-shim": "^0.3.3",
