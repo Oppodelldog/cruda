@@ -17,17 +17,17 @@ test('ErrorBoundary renders stable component', () => {
 
 test('ErrorBoundary renders and logs error if component throws, the button reloads the page', async () => {
     const originalError = console.error;
-    const originalReload = window.location.reload;
 
     let consoleError = null;
-    let wasReloadCalled = false;
 
     console.error = (msg) => {
         consoleError = msg;
     }
-    window.location.reload = () => {
-        wasReloadCalled = true
-    }
+    delete window.location;
+    window.location={};
+    Object.defineProperty(window.location, 'reload', {
+        value: jest.fn()
+    })
 
     const {getByText, findByTestId} = render(
         <ErrorBoundary>
@@ -40,10 +40,9 @@ test('ErrorBoundary renders and logs error if component throws, the button reloa
 
     fireEvent.click(await findByTestId('error-boundary-link-reload'))
 
-    expect(wasReloadCalled).toBeTruthy()
+    expect(window.location.reload).toHaveBeenCalled()
 
     console.error = originalError;
-    window.location.reload = originalReload;
 });
 
 class StableComponent extends Component<any, any> {
