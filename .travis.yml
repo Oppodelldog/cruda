@@ -15,4 +15,4 @@ before_script:
   - yarn install
 
 script:
-  - .auto-update/try.sh
+  - yarn test
