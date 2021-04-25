@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@sheerun/mutationobserver-shim": "^0.3.3",
-    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.0.2",
     "@testing-library/user-event": "^12.1.4",
     "@types/jest": "^26.0.22",
