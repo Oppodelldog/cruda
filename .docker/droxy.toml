@@ -1,0 +1,21 @@
+
+   [[command]]
+    name            = "node-template"
+    workDir         = "${PWD}"
+    isTemplate      = true
+    removeContainer = true
+    impersonate     = true
+    addGroups       = true
+    isInteractive   = true
+    requireEnvVars  = true
+    image           = "node:14.10.1"
+    volumes         = [
+        "${PWD}:${PWD}",
+        "${HOME}:${HOME}",
+    ]
+
+   [[command]]
+    name="yarn"
+    template="node-template"
+    entryPoint = "yarn"
+    uniqueNames=true
